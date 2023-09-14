@@ -2,7 +2,10 @@
 use strict;
 use warnings;
 
-use lib '../lib';
+# use lib '../lib'; # Using this line of code will cause vscode to report an error, as @INC reading occurs in the interpreter
+use FindBin;
+use lib "$FindBin::RealBin/../lib";
+
 use Storage;
 use VirtualMachine;
 
