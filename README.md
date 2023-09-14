@@ -9,9 +9,37 @@ PartⅡ
 
 - [x] Create a Perl module(Don't use Moose for this exercise.)
 
-  - [ ] VirtualMachine.pm(CRUD)
+  - [ ] VirtualMachine.pm
 
-  - [ ] Storage.pm(CRUD)
+  - primary key 
+
+  - name
+
+  - operating system (a set of pre-defined values)
+
+  - storage (every server can only have a single related storage object but one storage can be related to multiple servers)
+
+  - checksum (a md5 hash of relevant server object properties)
+
+  - create timestamp columns
+
+  - update timestamp columns
+
+  - [ ] Storage.pm
+
+  - primary key 
+
+  - name
+
+  - capacity
+
+  - create timestamp columns
+
+  - update timestamp columns
+
+  - [ ] DBConnector.pm
+
+  - [ ] Controller.pm
 
 - [ ] Link these two objects so they can be displayed together
 
