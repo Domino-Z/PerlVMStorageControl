@@ -20,6 +20,8 @@ my $db_pass = 'program';
 my $dsn = "DBI:$db_type:dbname=$db_name";
 my $dbh = DBI->connect($dsn, $db_user, $db_pass, { PrintError => 0, RaiseError => 1 });
 
+print "Opened database successfully\n";
+
 my $sotrage = Storage->new($dsn);
 my $vm = VirtualMachine->new($dsn);
 
