@@ -2,68 +2,48 @@ package Storage;
 
 use strict;
 use warnings;
+use DBI;
 
 sub new {
-    my $class = shift;
+    my ($class, $dbh) = @_;
     my $self = {
-        primary_key => undef,
-        name => shift,
-        capacity => shift,
-        created_at => undef,
-        updated_at => undef,
+        dbh => $dbh,
     };
     bless $self, $class;
     return $self;
 }
 
-sub set_primary_key {
-    my ($self, $primary_key) = @_;
-    $self->{primary_key} = $primary_key;
+sub create {
+    my ($self, $name, $capacity) = @_;
+    my $sql = "INSERT INTO storage (name, capacity) VALUES (?, ?)";
+    my $sth = $self->{dbh}->prepare($sql);
+    $sth->execute($name, $capacity);
+    return $self->{dbh}->last_insert_id(undef, undef, 'storage', undef);
 }
 
-sub get_primary_key {
-    my ($self) = @_;
-    return $self->{primary_key};
+sub read {
+    my ($self, $id) = @_;
+    my $sql = "SELECT * FROM sotrage WHERE id = ?";
+    my $sth = $self->{dbh}->prepare($sql);
+    $sth->execute($id);
+    return $self->fetchrow_hashref();
 }
 
-sub set_name {
-    my ($self, $name) = @_;
-    $self->{name} = $name;
+sub update {
+    my ($self, $id, $name, $capacity) = @_;
+    my $sql = "UPDATE storage SET name = ?, capacity = ? WHERE id = ?";
+    my $sth = $self->{dbh}->prepare($sql);
+    $sth->execute($name, $capacity, $id);
+    return 1;
+
 }
 
-sub get_name {
-    my ($self) = @_;
-    return $self->{name};
-}
-
-sub set_capacity {
-    my ($self, $capacity) = @_;
-    $self->{capacity} = $capacity;
-}
-
-sub get_capacity {
-    my ($self) = @_;
-    return $self->{capacity};
-}
-
-sub set_created_at {
-    my ($self, $created_at) = @_;
-    $self->{created_at} = $created_at;
-}
-
-sub get_created_at {
-    my ($self) = @_;
-    return $self->{created_at};
-}
-
-sub set_updated_at {
-    my ($self, $updated_at) = @_;
-    $self->{updated_at} = $updated_at;
-}
-
-sub get_updated_at {
-    my ($self) = @_;
-    return $self->{updated_at}
+sub delete {
+    my ($self, $id) = @_;
+    my $sql = "DELETE FROM storage WHERE id = ?";
+    my $sth = $self->{dbh}->prepare($sql);
+    $sth->execute($id);
+    return 1;
 }
 
 1;
