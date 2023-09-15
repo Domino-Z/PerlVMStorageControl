@@ -27,3 +27,27 @@ my $cgi = CGI->new();
 my $path_info = $cgi->path_info();
 my $contorller = WebController->new($cgi, $sotrage, $vm);
 
+if ($path_info eq '/create_storage'){
+    $contorller->create_storage();
+}
+elsif ($path_info eq '/create_vm') {
+    $contorller->create_vm();
+}
+elsif ($path_info eq '/update_storage') {
+    $contorller->update_storage();
+}
+elsif ($path_info eq '/delete_storage') {
+    $contorller->delete_storage();
+}
+elsif ($path_info eq '/delete_vm') {
+    $contorller->delete_vm();
+}
+elsif ($path_info eq '/display_objects') {
+    $contorller->display_objects();
+}
+else {
+    $contorller->show_error_page();
+} 
+
+print $cgi->header();
+print $contorller->get_respose_content();
