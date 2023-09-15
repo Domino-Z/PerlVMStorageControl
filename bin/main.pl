@@ -16,8 +16,10 @@ my $db_type = 'Pg';
 my $db_name = 'VMStorageControl';
 my $db_user = 'program';
 my $db_pass = 'program';
+my $db_host = 'localhost';
+my $db_port = '5432';
 
-my $dsn = "DBI:$db_type:dbname=$db_name";
+my $dsn = "DBI:$db_type:dbname=$db_name;host=$db_host;port=$db_port";
 my $dbh = DBI->connect($dsn, $db_user, $db_pass, { PrintError => 0, RaiseError => 1 });
 
 print "Opened database successfully\n";
