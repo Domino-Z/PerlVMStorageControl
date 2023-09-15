@@ -29,6 +29,14 @@ sub read {
     return $self->fetchrow_hashref();
 }
 
+sub read_all {
+    my ($self, $id) = @_;
+    my $sql = "SELECT * FROM virtual_machine";
+    my $sth = $self->{dbh}->prepare($sql);
+    $sth->execute();
+    return $self->fetchrow_hashref();
+}
+
 sub update {
     my ($self, $id, $name, $os, $storage_id) = @_;
     my $sql = "UPDATE virtual_machine SET name = ?, os = ?,storage_id = ? WHERE id = ?";

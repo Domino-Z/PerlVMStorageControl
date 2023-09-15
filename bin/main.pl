@@ -10,6 +10,7 @@ use lib "$FindBin::RealBin/../lib";
 
 use Storage;
 use VirtualMachine;
+use WebController;
 
 my $db_type = 'Pg';
 my $db_name = 'VMStorageControl';
@@ -23,5 +24,6 @@ my $sotrage = Storage->new($dsn);
 my $vm = VirtualMachine->new($dsn);
 
 my $cgi = CGI->new();
+my $path_info = $cgi->path_info();
+my $contorller = WebController->new($cgi, $sotrage, $vm);
 
-my $path_info = WebCOn

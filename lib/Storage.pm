@@ -29,6 +29,14 @@ sub read {
     return $self->fetchrow_hashref();
 }
 
+sub read_all {
+    my ($self, $id) = @_;
+    my $sql = "SELECT * FROM sotrage";
+    my $sth = $self->{dbh}->prepare($sql);
+    $sth->execute();
+    return $self->fetchrow_hashref();
+}
+
 sub update {
     my ($self, $id, $name, $capacity) = @_;
     my $sql = "UPDATE storage SET name = ?, capacity = ? WHERE id = ?";
