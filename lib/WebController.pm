@@ -2,14 +2,13 @@ package WebController;
 
 use strict;
 use warnings;
-use FindBin;
 use Template;
 
 sub new {
     my ($class, $cgi, $storage, $vm) = @_;
     my $self = {
         cgi => $cgi,
-        sotrage => $storage,
+        storage => $storage,
         vm => $vm,
     };
     bless $self, $class;
@@ -18,64 +17,66 @@ sub new {
 
 sub create_storage {
     my ($self) = @_;
+    my $cgi = $self->{cgi};
     
-    my $name = $self->{cgi}->param('name');
-    my $capacity = $self->{cgi}->param('capacity');
+    my $name = $cgi->{cgi}->param('name');
+    my $capacity = $cgi->{cgi}->param('capacity');
 
-    # TODO: input validation
     my $storage_id = $self->{storage}->create($name, $capacity);
     # TODO: Redirect to success or failure page
 }
 
 sub create_vm {
     my ($self) = @_;
+    my $cgi = $self->{cgi};
 
-    my $name = $self->{cgi}->param('name');
-    my $os = $self->{cgi}->param('os');
-    my $sotrage_id = $self->{cgi}->param('storage_id');
+    my $name = $cgi->{cgi}->param('name');
+    my $os = $cgi->{cgi}->param('os');
+    my $storage_id = $cgi->{cgi}->param('storage_id');
 
-    # TODO: input validation
-    my $vm_id = $self->{vm}->create($name, $os, $sotrage_id);
+    my $vm_id = $self->{vm}->create($name, $os, $storage_id);
     # TODO: Redirect to success or failure page
 }
 
 sub update_storage {
     my ($self) = @_;
-    
-    my $storage_id = $self->{cgi}->param->('storage_id');
-    my $name = $self->{cgi}->param->('name');
-    my $capacity = $self->{cgi}->param->('capacity');
+    my $cgi = $self->{cgi};
 
-    # TODO: input validation
+    my $storage_id = $cgi->{cgi}->param->('storage_id');
+    my $name = $cgi->{cgi}->param->('name');
+    my $capacity = $cgi->{cgi}->param->('capacity');
+
     $self->{storage}->update($storage_id, $name, $capacity);
     # TODO: Redirect to success or failure page
 }
 
 sub update_vm {
     my ($self) = @_;
+    my $cgi = $self->{cgi};
     
-    my $vm_id = $self->{cgi}->param->('vm_id');
-    my $name = $self->{cgi}->param->('name');
-    my $os = $self->{cgi}->param->('os');
-    my $storage_id = $self->{cgi}->param->('storage_id');
+    my $vm_id = $cgi->{cgi}->param->('vm_id');
+    my $name = $cgi->{cgi}->param->('name');
+    my $os = $cgi->{cgi}->param->('os');
+    my $storage_id = $cgi->{cgi}->param->('storage_id');
 
-    # TODO: input validation
     $self->{vm}->update($vm_id, $name, $os, $storage_id);
     # TODO: Redirect to success or failure page
 }
 
 sub delete_storage {
     my ($self) = @_;
+    my $cgi = $self->{cgi};
 
-    my $storage_id = $self->{cgi}->param->('storage_id');
+    my $storage_id = $cgi->{cgi}->param->('storage_id');
 
     $self->{storage}->delete($storage_id);
 }
 
 sub delete_vm {
     my ($self) = @_;
+    my $cgi = $self->{cgi};
 
-    my $vm_id = $self->{cgi}->param->('vm_id');
+    my $vm_id = $cgi->{cgi}->param->('vm_id');
 
     $self->{storage}->delete($vm_id);
 }
@@ -86,25 +87,42 @@ sub display_objects {
     my @storage_list = $self->{storage}->read_all();
     my @vm_list = $self->{vm}->read_all();
 
+    # Template Toolkit
+    my $template = Template->new();
+    my $template_file = 'templates/index_template.tmpl';
+
     my $template_data = {
         storage_list => \@storage_list,
         vm_list      => \@vm_list,
     };
 
     my $output;
-    $self->_render_template('index_template.tmpl', $template_data, \$output);
-    
-    $self->{response_content} = $output;
 
+    $template->process($template_file, $template_data, \$output)
+        || die "Template rendering error: " . $template->error();
+
+    print "Content-Type: text/html\n\n";
+    print $output;
 }
 
 sub show_error_page {
     my ($self) = @_;
     
-    my $output;
-    $self->_render_template('error_template.tmpl', {}, \$output);
+    # Template Toolkit
+    my $template = Template->new();
+    my $template_file = 'templates/error_template.tmpl';
 
-    $self->{response_content} = $output;
+    my $template_data = {
+        error_message => "An error occurred.",
+    };
+
+    my $output;
+    
+    $template->process($template_file, $template_data, \$output)
+        || die "Template rendering error: " . $template->error();
+
+    print "Content-Type: text/html\n\n";
+    print $output;
 }
 
 sub get_response_content {
@@ -112,16 +130,5 @@ sub get_response_content {
 
     return $self->{response_content};
 }
-
-sub _render_template {
-    my ($self, $template_name, $template_data, $output_ref) = @_;
-    
-    my $template = Template->new({
-        INCLUDE_PATH => "$FindBin::RealBin/../templates",
-    });
-    
-    $template->process($template_name, $template_data, $output_ref) || die $template->error();
-}
-
 
 1;
