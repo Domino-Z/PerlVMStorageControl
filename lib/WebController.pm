@@ -10,6 +10,7 @@ sub new {
         cgi => $cgi,
         storage => $storage,
         vm => $vm,
+        response_content => '',
     };
     bless $self, $class;
     return $self;
@@ -19,48 +20,50 @@ sub create_storage {
     my ($self) = @_;
     my $cgi = $self->{cgi};
     
-    my $name = $cgi->{cgi}->param('name');
-    my $capacity = $cgi->{cgi}->param('capacity');
+    my $name = $cgi->param('name');
+    my $capacity = $cgi->param('capacity');
 
     my $storage_id = $self->{storage}->create($name, $capacity);
-    # TODO: Redirect to success or failure page
+    
+    $self->{response_content} = "Storage created successfully";
 }
 
 sub create_vm {
     my ($self) = @_;
     my $cgi = $self->{cgi};
 
-    my $name = $cgi->{cgi}->param('name');
-    my $os = $cgi->{cgi}->param('os');
-    my $storage_id = $cgi->{cgi}->param('storage_id');
+    my $name = $cgi->param('name');
+    my $os = $cgi->param('os');
+    my $storage_id = $cgi->param('storage_id');
 
     my $vm_id = $self->{vm}->create($name, $os, $storage_id);
-    # TODO: Redirect to success or failure page
+    
+    $self->{response_content} = "Virtual machine created successfully";
 }
 
 sub update_storage {
     my ($self) = @_;
     my $cgi = $self->{cgi};
 
-    my $storage_id = $cgi->{cgi}->param->('storage_id');
-    my $name = $cgi->{cgi}->param->('name');
-    my $capacity = $cgi->{cgi}->param->('capacity');
+    my $storage_id = $cgi->param('storage_id');
+    my $name = $cgi->param('name');
+    my $capacity = $cgi->param('capacity');
 
     $self->{storage}->update($storage_id, $name, $capacity);
-    # TODO: Redirect to success or failure page
+    $self->{response_content} = "Storage updated successfully";
 }
 
 sub update_vm {
     my ($self) = @_;
     my $cgi = $self->{cgi};
-    
-    my $vm_id = $cgi->{cgi}->param->('vm_id');
-    my $name = $cgi->{cgi}->param->('name');
-    my $os = $cgi->{cgi}->param->('os');
-    my $storage_id = $cgi->{cgi}->param->('storage_id');
+
+    my $vm_id = $cgi->param('vm_id');
+    my $name = $cgi->param('name');
+    my $os = $cgi->param('os');
+    my $storage_id = $cgi->param('storage_id');
 
     $self->{vm}->update($vm_id, $name, $os, $storage_id);
-    # TODO: Redirect to success or failure page
+    $self->{response_content} = "Virtual machine updated successfully";
 }
 
 sub delete_storage {
@@ -70,19 +73,22 @@ sub delete_storage {
     my $storage_id = $cgi->{cgi}->param->('storage_id');
 
     $self->{storage}->delete($storage_id);
+    $self->{response_content} = "Storage deleted successfully";
 }
 
 sub delete_vm {
     my ($self) = @_;
     my $cgi = $self->{cgi};
 
-    my $vm_id = $cgi->{cgi}->param->('vm_id');
+    my $vm_id = $cgi->param('vm_id');
 
-    $self->{storage}->delete($vm_id);
+    $self->{vm}->delete($vm_id);
+    $self->{response_content} = "Virtual machine deleted successfully";
 }
 
 sub display_objects {
     my ($self) = @_;
+    my $path_info = $self->{cgi}->path_info();
     
     my @storage_list = $self->{storage}->read_all();
     my @vm_list = $self->{vm}->read_all();
@@ -101,8 +107,7 @@ sub display_objects {
     $template->process($template_file, $template_data, \$output)
         || die "Template rendering error: " . $template->error();
 
-    print "Content-Type: text/html\n\n";
-    print $output;
+    $self->{response_content} = $output;
 }
 
 sub show_error_page {
@@ -121,8 +126,7 @@ sub show_error_page {
     $template->process($template_file, $template_data, \$output)
         || die "Template rendering error: " . $template->error();
 
-    print "Content-Type: text/html\n\n";
-    print $output;
+    $self->{response_content} = $output;
 }
 
 sub get_response_content {
