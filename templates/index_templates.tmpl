@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Virtual Machines and Storage</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+</head>
+<body>
+    <h1>Welcome to Virtual Machines and Storage Management</h1>
+    
+    <h2>Storage Objects</h2>
+    <ul>
+        [% FOREACH storage IN storage_list %]
+        <li>Storage Name: [% storage.name %], Capacity: [% storage.capacity %]</li>
+        [% END %]
+    </ul>
+    
+    <h2>Virtual Machine Objects</h2>
+    <ul>
+        [% FOREACH vm IN vm_list %]
+        <li>VM Name: [% vm.name %], OS: [% vm.os %], Storage: [% vm.storage %]</li>
+        [% END %]
+    </ul>
+    
+    <a href="/create_vm">Create Virtual Machine</a>
+    <a href="/create_storage">Create Storage</a>
+</body>
+</html>
