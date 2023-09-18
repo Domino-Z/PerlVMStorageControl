@@ -27,7 +27,7 @@ my $retrieved_vm = $vm->read(1);
 is($retrieved_vm->{name}, "Test VM", "Retrieve VM by ID");
 
 # test update
-$vm->update(1, "Updated VM", "Windows", 1);
+$vm->update(1, "Updated VM", "Windows", 2);
 $retrieved_vm = $vm->read(1);
 is($retrieved_vm->{name}, "Updated VM", "Update VM");
 

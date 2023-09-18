@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use DBI;
 
+my $table_name = 'storage';
+
 sub new {
     my ($class, $dbh) = @_;
     my $self = {
@@ -19,11 +21,11 @@ sub create {
         die "Name and capacity are required for storage creation.";
     }
 
-    my $sql = "INSERT INTO storage (name, capacity) VALUES (?, ?)";
+    my $sql = "INSERT INTO $table_name (name, capacity) VALUES (?, ?)";
     my $sth = $self->{dbh}->prepare($sql);
     $sth->execute($name, $capacity) || die "Storage creation failed: " . $sth->errstr;
 
-    my $storage_id = $self->{dbh}->last_insert_id(undef, undef, 'storage', undef);
+    my $storage_id = $self->{dbh}->last_insert_id(undef, undef, $table_name, undef);
     return $storage_id;
 }
 
@@ -33,7 +35,7 @@ sub read {
         die "Storage ID is required for retrieving a storage object.";
     }
 
-    my $sql = "SELECT * FROM storage WHERE id = ?";
+    my $sql = "SELECT * FROM $table_name WHERE id = ?";
     my $sth = $self->{dbh}->prepare($sql);
     $sth->execute($storage_id) || die "Storage retrieval by ID failed: " . $sth->errstr;
 
@@ -44,7 +46,7 @@ sub read {
 sub read_all {
     my ($self) = @_;
 
-    my $sql = "SELECT * FROM storage";
+    my $sql = "SELECT * FROM $table_name";
     my $sth = $self->{dbh}->prepare($sql);
     $sth->execute() || die "Storage retrieval failed: " . $sth->errstr;
 
@@ -62,7 +64,7 @@ sub update {
         die "Storage ID, name, and capacity are required for storage update.";
     }
 
-    my $sql = "UPDATE storage SET name = ?, capacity = ? WHERE id = ?";
+    my $sql = "UPDATE $table_name SET name = ?, capacity = ? WHERE id = ?";
     my $sth = $self->{dbh}->prepare($sql);
     $sth->execute($name, $capacity, $storage_id) || die "Storage update failed: " . $sth->errstr;
 }
@@ -73,7 +75,7 @@ sub delete {
         die "Storage ID is required for storage deletion.";
     }
 
-    my $sql = "DELETE FROM storage WHERE id = ?";
+    my $sql = "DELETE FROM $table_name WHERE id = ?";
     my $sth = $self->{dbh}->prepare($sql);
     $sth->execute($storage_id) || die "Storage deletion failed: " . $sth->errstr;
 }
