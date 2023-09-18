@@ -70,7 +70,7 @@ sub delete_storage {
     my ($self) = @_;
     my $cgi = $self->{cgi};
 
-    my $storage_id = $cgi->{cgi}->param->('storage_id');
+    my $storage_id = $cgi->param('storage_id');
 
     $self->{storage}->delete($storage_id);
     $self->{response_content} = "Storage deleted successfully";
