@@ -23,18 +23,18 @@ sub create {
 
 sub read {
     my ($self, $id) = @_;
-    my $sql = "SELECT * FROM sotrage WHERE id = ?";
+    my $sql = "SELECT * FROM storage WHERE id = ?";
     my $sth = $self->{dbh}->prepare($sql);
     $sth->execute($id);
-    return $self->fetchrow_hashref();
+    return $sth->fetchrow_hashref();
 }
 
 sub read_all {
-    my ($self, $id) = @_;
-    my $sql = "SELECT * FROM sotrage";
+    my ($self) = @_;
+    my $sql = "SELECT * FROM storage";
     my $sth = $self->{dbh}->prepare($sql);
     $sth->execute();
-    return $self->fetchrow_hashref();
+    return $sth->fetchrow_hashref();
 }
 
 sub update {

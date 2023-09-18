@@ -2,6 +2,8 @@ package WebController;
 
 use strict;
 use warnings;
+use FindBin;
+use Template;
 
 sub new {
     my ($class, $cgi, $storage, $vm) = @_;
@@ -84,21 +86,42 @@ sub display_objects {
     my @storage_list = $self->{storage}->read_all();
     my @vm_list = $self->{vm}->read_all();
 
-    # TODO:using a template engine to render data into an HTML view
+    my $template_data = {
+        storage_list => \@storage_list,
+        vm_list      => \@vm_list,
+    };
 
+    my $output;
+    $self->_render_template('index_template.tmpl', $template_data, \$output);
+    
+    $self->{response_content} = $output;
 
 }
 
 sub show_error_page {
     my ($self) = @_;
     
-    # TODO:error_page
+    my $output;
+    $self->_render_template('error_template.tmpl', {}, \$output);
+
+    $self->{response_content} = $output;
 }
 
-sub get_respose_content {
+sub get_response_content {
     my ($self) = @_;
 
-    # TODO:HTTP_respose
+    return $self->{response_content};
 }
+
+sub _render_template {
+    my ($self, $template_name, $template_data, $output_ref) = @_;
+    
+    my $template = Template->new({
+        INCLUDE_PATH => "$FindBin::RealBin/../templates",
+    });
+    
+    $template->process($template_name, $template_data, $output_ref) || die $template->error();
+}
+
 
 1;
