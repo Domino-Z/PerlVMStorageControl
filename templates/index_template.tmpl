@@ -1,27 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Virtual Machines and Storage</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    <title>Object List</title>
 </head>
 <body>
-    <h1>Welcome to Virtual Machines and Storage Management</h1>
-    
-    <h2>Storage Objects</h2>
-    <ul>
+    <h1>Object List</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Capacity/OS</th>
+            <th>Actions</th>
+        </tr>
         [% FOREACH storage IN storage_list %]
-        <li>Storage Name: [% storage.name %], Capacity: [% storage.capacity %]</li>
+        <tr>
+            <td>[% storage.id %]</td>
+            <td>[% storage.name %]</td>
+            <td>[% storage.capacity %]</td>
+            <td>
+                <a href="/update_storage?id=[% storage.id %]">Edit Storage</a>
+                <a href="/delete_storage?id=[% storage.id %]">Delete Storage</a>
+            </td>
+        </tr>
         [% END %]
-    </ul>
-    
-    <h2>Virtual Machine Objects</h2>
-    <ul>
         [% FOREACH vm IN vm_list %]
-        <li>VM Name: [% vm.name %], OS: [% vm.os %], Storage: [% vm.storage %]</li>
+        <tr>
+            <td>[% vm.id %]</td>
+            <td>[% vm.name %]</td>
+            <td>[% vm.os %]</td>
+            <td>
+                <a href="/update_vm?id=[% vm.id %]">Edit VM</a>
+                <a href="/delete_vm?id=[% vm.id %]">Delete VM</a>
+            </td>
+        </tr>
         [% END %]
-    </ul>
-    
-    <a href="/create_vm">Create Virtual Machine</a>
-    <a href="/create_storage">Create Storage</a>
-</body>
-</html>
+    </
