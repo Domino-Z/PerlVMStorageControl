@@ -22,6 +22,8 @@ my $storage = Storage->new($dbh);
 # test create
 my $storage_id = $storage->create("Test Storage", 100);
 is($storage_id, 1, "Create Storage");
+my $storage_id = $storage->create("Test Storage", 500);
+is($storage_id, 2, "Create Storage");
 
 # test read
 my $retrieved_storage = $storage->read(1);
