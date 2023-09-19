@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use DBI;
 use CGI;
 
 use lib qw(lib);
