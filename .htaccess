@@ -10,4 +10,4 @@ RewriteBase /
 # redirect all requests to main.pl
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ main.pl/$1 [L,QSA]
+RewriteRule ^cgi-bin/([^\s]+\.pl) /cgi-bin/$1 [L,QSA]

@@ -8,7 +8,7 @@ RUN a2enmod cgi
 
 WORKDIR /var/www/html
 
-COPY bin/ /var/www/html/cgi-bin/
+COPY cgi-bin/ /var/www/html/cgi-bin/
 COPY lib/ /var/www/html/lib/
 COPY templates/ /var/www/html/templates/
 COPY static/ /var/www/html/static/
