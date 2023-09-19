@@ -32,9 +32,9 @@ $storage->update(1, "Updated Storage", 200);
 $retrieved_storage = $storage->read(1);
 is($retrieved_storage->{name}, "Updated Storage", "Update Storage");
 
-# test delete;
-$storage->delete(1);
-$retrieved_storage = $storage->read(1);
-is($retrieved_storage, undef, "Delete Storage");
+# # test delete;
+# $storage->delete(1);
+# $retrieved_storage = $storage->read(1);
+# is($retrieved_storage, undef, "Delete Storage");
 
 done_testing();

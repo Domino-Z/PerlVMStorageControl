@@ -2,18 +2,9 @@ package Storage;
 
 use strict;
 use warnings;
-use DBI;
+use base qw(DB);
 
 my $table_name = 'storage';
-
-sub new {
-    my ($class, $dbh) = @_;
-    my $self = {
-        dbh => $dbh,
-    };
-    bless $self, $class;
-    return $self;
-}
 
 sub create {
     my ($self, $name, $capacity) = @_;
@@ -22,8 +13,7 @@ sub create {
     }
 
     my $sql = "INSERT INTO $table_name (name, capacity) VALUES (?, ?)";
-    my $sth = $self->{dbh}->prepare($sql);
-    $sth->execute($name, $capacity) || die "Storage creation failed: " . $sth->errstr;
+    my $sth = $self->execute_query($sql, $name, $capacity);
 
     my $storage_id = $self->{dbh}->last_insert_id(undef, undef, $table_name, undef);
     return $storage_id;
@@ -36,8 +26,7 @@ sub read {
     }
 
     my $sql = "SELECT * FROM $table_name WHERE id = ?";
-    my $sth = $self->{dbh}->prepare($sql);
-    $sth->execute($storage_id) || die "Storage retrieval by ID failed: " . $sth->errstr;
+    my $sth = $self->execute_query($sql, $storage_id);
 
     my $storage_object = $sth->fetchrow_hashref();
     return $storage_object;
@@ -47,15 +36,14 @@ sub read_all {
     my ($self) = @_;
 
     my $sql = "SELECT * FROM $table_name";
-    my $sth = $self->{dbh}->prepare($sql);
-    $sth->execute() || die "Storage retrieval failed: " . $sth->errstr;
+    my $sth = $self->execute_query($sql);
 
     my @storage_list;
     while (my $row = $sth->fetchrow_hashref()) {
         push @storage_list, $row;
     }
 
-    return @storage_list;    
+    return @storage_list;
 }
 
 sub update {
@@ -65,8 +53,7 @@ sub update {
     }
 
     my $sql = "UPDATE $table_name SET name = ?, capacity = ? WHERE id = ?";
-    my $sth = $self->{dbh}->prepare($sql);
-    $sth->execute($name, $capacity, $storage_id) || die "Storage update failed: " . $sth->errstr;
+    my $sth = $self->execute_query($sql, $name, $capacity, $storage_id);
 }
 
 sub delete {
@@ -76,8 +63,7 @@ sub delete {
     }
 
     my $sql = "DELETE FROM $table_name WHERE id = ?";
-    my $sth = $self->{dbh}->prepare($sql);
-    $sth->execute($storage_id) || die "Storage deletion failed: " . $sth->errstr;
+    my $sth = $self->execute_query($sql, $storage_id);
 }
 
 1;
