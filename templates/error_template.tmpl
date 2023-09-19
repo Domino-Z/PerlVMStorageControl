@@ -1,11 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Error</title>
+    <title>Object List</title>
 </head>
 <body>
-    <h1>Oops! An Error Occurred</h1>
-    <p>[% error_message %]</p>
-    <a href="/">Back to Home</a>
+    <h1>Object List</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Capacity/OS</th>
+            <th>Actions</th>
+        </tr>
+        
+        [% FOREACH storage IN storage_list %]
+        <tr>
+            <td>[% storage.id %]</td>
+            <td>[% storage.name %]</td>
+            <td>[% storage.capacity %]</td>
+            <td>
+                <a href="/update_storage?id=[% storage.id %]">Edit Storage</a>
+                <a href="/delete_storage?id=[% storage.id %]">Delete Storage</a>
+            </td>
+        </tr>
+        [% END %]
+        
+        [% FOREACH vm IN vm_list %]
+        <tr>
+            <td>[% vm.id %]</td>
+            <td>[% vm.name %]</td>
+            <td>[% vm.os %]</td>
+            <td>
+                <a href="/update_vm?id=[% vm.id %]">Edit VM</a>
+                <a href="/delete_vm?id=[% vm.id %]">Delete VM</a>
+            </td>
+        </tr>
+        [% END %]
+    </table>
 </body>
 </html>
