@@ -3,6 +3,8 @@ package WebController;
 use strict;
 use warnings;
 use Template;
+use FindBin;
+use File::Spec;
 
 sub new {
     my ($class, $cgi, $storage, $vm) = @_;
@@ -14,6 +16,25 @@ sub new {
     };
     bless $self, $class;
     return $self;
+}
+
+sub get_template_path {
+    my ($self, $template_name) = @_;
+    my $base_dir = FindBin::Bin;
+    my $templates_dir = File::Spec->catdir($base_dir, '..', 'templates');
+    return File::Spec->catfile($templates_dir, $template_name);
+}
+
+sub render_template {
+    my ($self, $template_file, $template_data) = @_;
+
+    my $template = Template->new();
+    my $output;
+
+    $template->process($template_file, $template_data, \$output)
+        || die "Template rendering error: " . $template->error();
+
+    return $output;
 }
 
 sub create_storage {
@@ -93,19 +114,15 @@ sub display_objects {
     my @storage_list = $self->{storage}->read_all();
     my @vm_list = $self->{vm}->read_all();
 
-    # Template Toolkit
-    my $template = Template->new();
-    my $template_file = 'templates/index_template.tmpl';
+    my $template_name = 'index_template.tmpl';
+    my $template_file = $self->get_template_path($template_name);
 
     my $template_data = {
         storage_list => \@storage_list,
         vm_list      => \@vm_list,
     };
 
-    my $output;
-
-    $template->process($template_file, $template_data, \$output)
-        || die "Template rendering error: " . $template->error();
+    my $output = $self->render_template($template_file, $template_data);
 
     $self->{response_content} = $output;
 }
@@ -113,18 +130,14 @@ sub display_objects {
 sub show_error_page {
     my ($self) = @_;
     
-    # Template Toolkit
-    my $template = Template->new();
-    my $template_file = 'templates/error_template.tmpl';
+    my $template_name = 'error_template.tmpl';
+    my $template_file = $self->get_template_path($template_name);
 
     my $template_data = {
         error_message => "An error occurred.",
     };
 
-    my $output;
-    
-    $template->process($template_file, $template_data, \$output)
-        || die "Template rendering error: " . $template->error();
+    my $output = $self->render_template($template_file, $template_data);
 
     $self->{response_content} = $output;
 }

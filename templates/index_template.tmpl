@@ -1,39 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Object List</title>
+    <title>Virtual Machines and Storage</title>
 </head>
 <body>
-    <h1>Object List</h1>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Capacity/OS</th>
-            <th>Actions</th>
-        </tr>
+    <h1>Storage List</h1>
+    <ul>
         [% FOREACH storage IN storage_list %]
-        <tr>
-            <td>[% storage.id %]</td>
-            <td>[% storage.name %]</td>
-            <td>[% storage.capacity %]</td>
-            <td>
-                <a href="/update_storage?id=[% storage.id %]">Edit Storage</a>
-                <a href="/delete_storage?id=[% storage.id %]">Delete Storage</a>
-            </td>
-        </tr>
+        <li>[% storage.name %] - Capacity: [% storage.capacity %]</li>
         [% END %]
+    </ul>
+
+    <h1>Virtual Machine List</h1>
+    <ul>
         [% FOREACH vm IN vm_list %]
-        <tr>
-            <td>[% vm.id %]</td>
-            <td>[% vm.name %]</td>
-            <td>[% vm.os %]</td>
-            <td>
-                <a href="/update_vm?id=[% vm.id %]">Edit VM</a>
-                <a href="/delete_vm?id=[% vm.id %]">Delete VM</a>
-            </td>
-        </tr>
+        <li>[% vm.name %] - OS: [% vm.os %] - Storage ID: [% vm.storage_id %]</li>
         [% END %]
-    </table>
+    </ul>
 </body>
 </html>
