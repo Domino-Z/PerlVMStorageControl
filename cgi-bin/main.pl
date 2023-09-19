@@ -3,7 +3,9 @@ use strict;
 use warnings;
 use CGI;
 
-use lib qw(lib);
+# use lib qw(lib);
+use FindBin;
+use lib "$FindBin::RealBin/../lib";
 use Storage;
 use VirtualMachine;
 use WebController;
@@ -51,5 +53,5 @@ if ($path_info eq '/create_storage') {
 
 my $response_content = $controller->get_response_content;
 
-print $cgi->header;  # 输出 HTTP 标头
-print $response_content;  # 输出响应内容
+print $cgi->header;
+print $response_content;
