@@ -1,7 +1,13 @@
 Options +ExecCGI
 AddHandler cgi-script .pl
 
-<FilesMatch "\.pl$">
-    SetHandler cgi-script
-    Options +ExecCGI
-</FilesMatch>
+DirectoryIndex main.pl
+
+Options +MultiViews
+RewriteEngine On
+RewriteBase /
+
+# redirect all requests to main.pl
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ main.pl/$1 [L,QSA]
