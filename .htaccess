@@ -1,0 +1,7 @@
+Options +ExecCGI
+AddHandler cgi-script .pl
+
+<FilesMatch "\.pl$">
+    SetHandler cgi-script
+    Options +ExecCGI
+</FilesMatch>
