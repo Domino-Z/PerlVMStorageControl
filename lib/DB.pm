@@ -23,4 +23,9 @@ sub execute_query {
     return $sth;
 }
 
+sub disconnect {
+    my ($self) = @_;
+    $self->{dbh}->disconnect;
+}
+
 1;
