@@ -19,11 +19,11 @@ sub new {
 sub create_storage {
     my ($self) = @_;
     my $cgi = $self->{cgi};
-    
-    if ($cgi->param('submit')) {
-        my $name = $cgi->param('name');
-        my $capacity = $cgi->param('capacity');
 
+    my $name = $cgi->param('name');
+    my $capacity = $cgi->param('capacity');
+
+    if ($name && $capacity) {
         my $storage_id = $self->{storage}->create($name, $capacity);
         $self->{response_content} = "Storage created successfully";
     } else {
@@ -49,11 +49,11 @@ sub create_vm {
     my ($self) = @_;
     my $cgi = $self->{cgi};
 
-    if ($cgi->param('submit')) {
-        my $name = $cgi->param('name');
-        my $os = $cgi->param('os');
-        my $storage_id = $cgi->param('storage_id');
+    my $name = $cgi->param('name');
+    my $os = $cgi->param('os');
+    my $storage_id = $cgi->param('storage_id');
 
+    if ($name && $os && $storage_id) {
         my $vm_id = $self->{vm}->create($name, $os, $storage_id);        
         $self->{response_content} = "Virtual machine created successfully";
     } else {
@@ -81,11 +81,11 @@ sub update_storage {
     my ($self) = @_;
     my $cgi = $self->{cgi};
 
-    if ($cgi->param('submit')) {
-        my $storage_id = $cgi->param('storage_id');
-        my $name = $cgi->param('name');
-        my $capacity = $cgi->param('capacity');
+    my $storage_id = $cgi->param('storage_id');
+    my $name = $cgi->param('name');
+    my $capacity = $cgi->param('capacity');
 
+    if ($storage_id && $name && $capacity) {
         $self->{storage}->update($storage_id, $name, $capacity);
         $self->{response_content} = "Storage updated successfully";
     } else {
@@ -111,12 +111,12 @@ sub update_vm {
     my ($self) = @_;
     my $cgi = $self->{cgi};
 
-    if ($cgi->param('submit')) {
-        my $vm_id = $cgi->param('vm_id');
-        my $name = $cgi->param('name');
-        my $os = $cgi->param('os');
-        my $storage_id = $cgi->param('storage_id');
-
+    my $vm_id = $cgi->param('vm_id');
+    my $name = $cgi->param('name');
+    my $os = $cgi->param('os');
+    my $storage_id = $cgi->param('storage_id');
+    
+    if ($vm_id && $name && $os && $storage_id) {
         $self->{vm}->update($vm_id, $name, $os, $storage_id);
         $self->{response_content} = "Virtual machine updated successfully";
     } else {
@@ -157,7 +157,6 @@ sub display_objects {
     my @storage_list = $self->{storage}->read_all();
     my @vm_list = $self->{vm}->read_all();
 
-    # Template Toolkit
     my $template = Template->new();
     my $template_file = 'templates/index_template.tmpl';
 
@@ -177,7 +176,6 @@ sub display_objects {
 sub show_error_page {
     my ($self) = @_;
     
-    # Template Toolkit
     my $template = Template->new();
     my $template_file = 'templates/error_template.tmpl';
 
