@@ -12,7 +12,7 @@
         [% FOREACH storage IN storage_list %]
         <li>
             Storage Name: [% storage.name %], Capacity: [% storage.capacity %]
-            [<a href="/edit_storage?storage_id=[% storage.id %]">Edit</a>]
+            [<a href="/update_storage?storage_id=[% storage.id %]">Edit</a>]
             [<a href="/delete_storage?storage_id=[% storage.id %]">Delete</a>]
         </li>
         [% END %]
@@ -23,7 +23,7 @@
         [% FOREACH vm IN vm_list %]
         <li>
             VM Name: [% vm.name %], OS: [% vm.os %], Storage: [% vm.storage %]
-            [<a href="/edit_vm?vm_id=[% vm.id %]">Edit</a>]
+            [<a href="/update_vm?vm_id=[% vm.id %]">Edit</a>]
             [<a href="/delete_vm?vm_id=[% vm.id %]">Delete</a>]
         </li>
         [% END %]
@@ -31,8 +31,6 @@
 
     <a href="/create_vm">Create Virtual Machine</a>
     <a href="/create_storage">Create Storage</a>
-    
-    <!-- 添加链接到其他页面 -->
     <a href="/storage_list">View Storage List</a>
     <a href="/vm_list">View Virtual Machine List</a>
 </body>

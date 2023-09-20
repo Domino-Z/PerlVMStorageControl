@@ -20,60 +20,124 @@ sub create_storage {
     my ($self) = @_;
     my $cgi = $self->{cgi};
     
-    my $name = $cgi->param('name');
-    my $capacity = $cgi->param('capacity');
+    if ($cgi->param('submit')) {
+        my $name = $cgi->param('name');
+        my $capacity = $cgi->param('capacity');
 
-    my $storage_id = $self->{storage}->create($name, $capacity);
-    
-    $self->{response_content} = "Storage created successfully";
+        my $storage_id = $self->{storage}->create($name, $capacity);
+        $self->{response_content} = "Storage created successfully";
+    } else {
+        my @storage_list = $self->{storage}->read_all();
+
+        my $template = Template->new();
+        my $template_file = 'templates/create_storage.tmpl';
+
+        my $template_data = {
+            storage_list => \@storage_list,
+        };
+
+        my $output;
+
+        $template->process($template_file, $template_data, \$output)
+            || die "Template rendering error: " . $template->error();
+
+        $self->{response_content} = $output;
+    }
 }
 
 sub create_vm {
     my ($self) = @_;
     my $cgi = $self->{cgi};
 
-    my $name = $cgi->param('name');
-    my $os = $cgi->param('os');
-    my $storage_id = $cgi->param('storage_id');
+    if ($cgi->param('submit')) {
+        my $name = $cgi->param('name');
+        my $os = $cgi->param('os');
+        my $storage_id = $cgi->param('storage_id');
 
-    my $vm_id = $self->{vm}->create($name, $os, $storage_id);
-    
-    $self->{response_content} = "Virtual machine created successfully";
+        my $vm_id = $self->{vm}->create($name, $os, $storage_id);        
+        $self->{response_content} = "Virtual machine created successfully";
+    } else {
+        my @storage_list = $self->{storage}->read_all();
+        my @vm_list = $self->{vm}->read_all();
+
+        my $template = Template->new();
+        my $template_file = 'templates/create_vm.tmpl';
+
+        my $template_data = {
+            storage_list => \@storage_list,
+            vm_list      => \@vm_list,
+        };
+
+        my $output;
+
+        $template->process($template_file, $template_data, \$output)
+            || die "Template rendering error: " . $template->error();
+
+        $self->{response_content} = $output;
+    }
 }
 
 sub update_storage {
     my ($self) = @_;
     my $cgi = $self->{cgi};
 
-    my $storage_id = $cgi->param('storage_id');
-    my $name = $cgi->param('name');
-    my $capacity = $cgi->param('capacity');
+    if ($cgi->param('submit')) {
+        my $storage_id = $cgi->param('storage_id');
+        my $name = $cgi->param('name');
+        my $capacity = $cgi->param('capacity');
 
-    $self->{storage}->update($storage_id, $name, $capacity);
-    $self->{response_content} = "Storage updated successfully";
+        $self->{storage}->update($storage_id, $name, $capacity);
+        $self->{response_content} = "Storage updated successfully";
+    } else {
+        my @storage_list = $self->{storage}->read_all();
+
+        my $template = Template->new();
+        my $template_file = 'templates/update_storage.tmpl';
+
+        my $template_data = {
+            storage_list => \@storage_list,
+        };
+
+        my $output;
+
+        $template->process($template_file, $template_data, \$output)
+            || die "Template rendering error: " . $template->error();
+
+        $self->{response_content} = $output;
+    }
 }
 
 sub update_vm {
     my ($self) = @_;
     my $cgi = $self->{cgi};
 
-    my $vm_id = $cgi->param('vm_id');
-    my $name = $cgi->param('name');
-    my $os = $cgi->param('os');
-    my $storage_id = $cgi->param('storage_id');
+    if ($cgi->param('submit')) {
+        my $vm_id = $cgi->param('vm_id');
+        my $name = $cgi->param('name');
+        my $os = $cgi->param('os');
+        my $storage_id = $cgi->param('storage_id');
 
-    $self->{vm}->update($vm_id, $name, $os, $storage_id);
-    $self->{response_content} = "Virtual machine updated successfully";
-}
+        $self->{vm}->update($vm_id, $name, $os, $storage_id);
+        $self->{response_content} = "Virtual machine updated successfully";
+    } else {
+        my @storage_list = $self->{storage}->read_all();
+        my @vm_list = $self->{vm}->read_all();
 
-sub delete_storage {
-    my ($self) = @_;
-    my $cgi = $self->{cgi};
+        my $template = Template->new();
+        my $template_file = 'templates/update_vm.tmpl';
 
-    my $storage_id = $cgi->param('storage_id');
+        my $template_data = {
+            storage_list => \@storage_list,
+            vm_list      => \@vm_list,
+        };
 
-    $self->{storage}->delete($storage_id);
-    $self->{response_content} = "Storage deleted successfully";
+        my $output;
+
+        $template->process($template_file, $template_data, \$output)
+            || die "Template rendering error: " . $template->error();
+
+        $self->{response_content} = $output;
+    }
 }
 
 sub delete_vm {
