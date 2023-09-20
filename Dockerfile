@@ -14,6 +14,8 @@ COPY data/ /var/www/html/data/
 COPY .htaccess /var/www/html/
 COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 
+RUN chmod +x /var/www/html/cgi-bin/main.pl
+
 EXPOSE 80
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf

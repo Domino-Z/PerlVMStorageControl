@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Virtual Machine List</title>
+</head>
+<body>
+    <h1>Virtual Machine List</h1>
+    <ul>
+        [% FOREACH vm IN vm_list %]
+            <li>
+                VM Name: [% vm.name %], OS: [% vm.os %], Storage: [% vm.storage %]
+                [<a href="/edit_vm?vm_id=[% vm.id %]">Edit</a>]
+                [<a href="/delete_vm?vm_id=[% vm.id %]">Delete</a>]
+            </li>
+        [% END %]
+    </ul>
+    <a href="/create_vm">Create New VM</a>
+</body>
+</html>
