@@ -9,7 +9,7 @@ PartⅡ
 
 - [x] Create a Perl module(Don't use Moose for this exercise.)
 
-  - [ ] VirtualMachine.pm
+  - [x] VirtualMachine.pm
 
   - primary key 
 
@@ -25,7 +25,7 @@ PartⅡ
 
   - update timestamp columns
 
-  - [ ] Storage.pm
+  - [x] Storage.pm
 
   - primary key 
 
@@ -37,13 +37,11 @@ PartⅡ
 
   - update timestamp columns
 
-  - [ ] DBConnector.pm
+  - [x] WebController.pm
 
-  - [ ] Controller.pm
+- [x] Link these two objects so they can be displayed together
 
-- [ ] Link these two objects so they can be displayed together
-
-- [ ] Create unit test for the created module
+- [x] Create unit test for the created module
 
 PartⅢ
 
@@ -52,4 +50,3 @@ PartⅢ
 - [ ] Create a web application that uses the created module
 
 - [ ] Add some CSS styling
-
