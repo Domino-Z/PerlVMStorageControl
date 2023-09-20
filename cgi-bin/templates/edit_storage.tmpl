@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Storage</title>
+</head>
+<body>
+    <h1>Edit Storage</h1>
+    <form action="/edit_storage?storage_id=[% storage.id %]" method="post">
+        <label for="name">Storage Name:</label>
+        <input type="text" name="name" id="name" value="[% storage.name %]" required><br>
+        <label for="capacity">Capacity:</label>
+        <input type="number" name="capacity" id="capacity" value="[% storage.capacity %]" required><br>
+        <input type="submit" value="Save Changes">
+    </form>
+</body>
+</html>

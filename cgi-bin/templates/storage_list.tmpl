@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Storage List</title>
+</head>
+<body>
+    <h1>Storage List</h1>
+    <ul>
+        [% FOREACH storage IN storage_list %]
+            <li>
+                Storage Name: [% storage.name %], Capacity: [% storage.capacity %]
+                [<a href="/edit_storage?storage_id=[% storage.id %]">Edit</a>]
+                [<a href="/delete_storage?storage_id=[% storage.id %]">Delete</a>]
+            </li>
+        [% END %]
+    </ul>
+    <a href="/create_storage">Create New Storage</a>
+</body>
+</html>
