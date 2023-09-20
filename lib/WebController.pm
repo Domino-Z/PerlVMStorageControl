@@ -150,6 +150,44 @@ sub delete_vm {
     $self->{response_content} = "Virtual machine deleted successfully";
 }
 
+sub storage_list {
+    my ($self) = @_;
+    my @storage_list = $self->{storage}->read_all();
+    
+    my $template = Template->new();
+    my $template_file = 'templates/storage_list.tmpl';
+
+    my $template_data = {
+        storage_list => \@storage_list,
+    };
+
+    my $output;
+    
+    $template->process($template_file, $template_data, \$output)
+        || die "Template rendering error: " . $template->error();
+
+    $self->{response_content} = $output;
+}
+
+sub vm_list {
+    my ($self) = @_;
+    my @vm_list = $self->{vm}->read_all();
+    
+    my $template = Template->new();
+    my $template_file = 'templates/vm_list.tmpl';
+    
+    my $template_data = {
+        vm_list => \@vm_list,
+    };
+
+    my $output;
+    
+    $template->process($template_file, $template_data, \$output)
+        || die "Template rendering error: " . $template->error();
+
+    $self->{response_content} = $output;
+}
+
 sub display_objects {
     my ($self) = @_;
     my $path_info = $self->{cgi}->path_info();

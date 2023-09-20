@@ -9,11 +9,12 @@
         [% FOREACH vm IN vm_list %]
             <li>
                 VM Name: [% vm.name %], OS: [% vm.os %], Storage: [% vm.storage %]
-                [<a href="/edit_vm?vm_id=[% vm.id %]">Edit</a>]
+                [<a href="/update_vm?vm_id=[% vm.id %]">Edit</a>]
                 [<a href="/delete_vm?vm_id=[% vm.id %]">Delete</a>]
             </li>
         [% END %]
     </ul>
     <a href="/create_vm">Create New VM</a>
+    <a href="/">Back to Home</a>
 </body>
 </html>

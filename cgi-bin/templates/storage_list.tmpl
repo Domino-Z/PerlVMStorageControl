@@ -9,11 +9,12 @@
         [% FOREACH storage IN storage_list %]
             <li>
                 Storage Name: [% storage.name %], Capacity: [% storage.capacity %]
-                [<a href="/edit_storage?storage_id=[% storage.id %]">Edit</a>]
+                [<a href="/update_storage?storage_id=[% storage.id %]">Edit</a>]
                 [<a href="/delete_storage?storage_id=[% storage.id %]">Delete</a>]
             </li>
         [% END %]
     </ul>
     <a href="/create_storage">Create New Storage</a>
+    <a href="/">Back to Home</a>
 </body>
 </html>

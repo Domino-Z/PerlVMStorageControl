@@ -30,6 +30,8 @@ my $path_info = $cgi->path_info();
 my $controller = WebController->new($cgi, $storage, $vm);
 
 my %route_map = (
+    '/storage_list'   => 'storage_list',
+    '/vm_list'        => 'vm_list',
     '/create_storage' => 'create_storage',
     '/create_vm'      => 'create_vm',
     '/update_storage' => 'update_storage',
