@@ -29,26 +29,21 @@ my $cgi = CGI->new();
 my $path_info = $cgi->path_info();
 my $controller = WebController->new($cgi, $storage, $vm);
 
-# routing
-if ($path_info eq '/create_storage') {
-    $controller->create_storage;
-} elsif ($path_info eq '/create_vm') {
-    $controller->create_vm;
-} elsif ($path_info eq '/update_storage') {
-    $controller->update_storage;
-} elsif ($path_info eq '/update_vm') {
-    $controller->update_vm;
-} elsif ($path_info eq '/delete_storage') {
-    $controller->delete_storage;
-} elsif ($path_info eq '/delete_vm') {
-    $controller->delete_vm;
+my %route_map = (
+    '/create_storage' => 'create_storage',
+    '/create_vm'      => 'create_vm',
+    '/update_storage' => 'update_storage',
+    '/update_vm'      => 'update_vm',
+    '/delete_storage' => 'delete_storage',
+    '/delete_vm'      => 'delete_vm',
+    '/'               => 'display_objects',
+);
+
+my $controller_method = $route_map{$path_info};
+if ($controller_method) {
+    $controller->$controller_method;
 } else {
-    # defualt page
-    if ($path_info eq '/') {
-        $controller->display_objects;
-    } else {
-        $controller->show_error_page("Page not found");
-    }
+    $controller->show_error_page("Page not found");
 }
 
 my $response_content = $controller->get_response_content;
