@@ -35,7 +35,7 @@ sub read {
 sub read_all {
     my ($self) = @_;
 
-    my $sql = "SELECT id, name, os, storage_id FROM $table_name";
+    my $sql = "SELECT * FROM $table_name";
     my $sth = $self->execute_query($sql);
 
     my @vm_list;
