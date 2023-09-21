@@ -58,14 +58,19 @@ sub create_vm {
         $self->{response_content} = "Virtual machine created successfully";
     } else {
         my @storage_list = $self->{storage}->read_all();
-        my @vm_list = $self->{vm}->read_all();
+        
+        my $storage_options = '';
+        foreach my $storage (@storage_list) {
+            my $storage_id = $storage->{id};
+            my $storage_name = $storage->{name};
+            $storage_options .= qq{<option value="$storage_id">$storage_name</option>};
+        }
 
         my $template = Template->new();
         my $template_file = 'templates/create_vm.tmpl';
 
         my $template_data = {
-            storage_list => \@storage_list,
-            vm_list      => \@vm_list,
+            storage_options => $storage_options,
         };
 
         my $output;

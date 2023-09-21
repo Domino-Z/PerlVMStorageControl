@@ -9,9 +9,14 @@
         <label for="name">VM Name:</label>
         <input type="text" name="name" id="name" required><br>
         <label for="os">OS:</label>
-        <input type="text" name="os" id="os" required><br>
+        <select name="os" id="os" required>
+            <option value="Windows">Windows</option>
+            <option value="Linux">Linux</option>
+        </select><br>
         <label for="storage_id">Storage:</label>
-        <input type="number" name="storage_id" id="storage_id" required><br>
+        <select name="storage_id" id="storage_id" required>
+            [% storage_options %]
+        </select><br>
         <input type="submit" value="Create">
     </form>
 </body>
