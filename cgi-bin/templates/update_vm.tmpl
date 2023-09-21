@@ -12,7 +12,10 @@
         <input type="text" name="name" id="name" value="[% vm.name %]" required><br>
         
         <label for="os">OS:</label>
-        <input type="text" name="os" id="os" value="[% vm.os %]" required><br>
+        <select name="os" id="os" required>
+            <option value="Windows">Windows</option>
+            <option value="Linux">Linux</option>
+        </select><br>
         
         <label for="storage_id">Storage:</label>
         <select name="storage_id" id="storage_id">
