@@ -8,7 +8,7 @@
     <ul>
         [% FOREACH vm IN vm_list %]
             <li>
-                VM ID: [% vm.id %], Name: [% vm.name %], OS: [% vm.os %], Storage: [% vm.storage %]
+                VM ID: [% vm.id %], Name: [% vm.name %], OS: [% vm.os %], Storage ID: [% vm.storage_id %], Storage: [% vm.storage_name %]
                 [<a href="/update_vm?vm_id=[% vm.id %]">Edit</a>]
                 [<a href="/delete_vm?vm_id=[% vm.id %]">Delete</a>]
             </li>

@@ -182,7 +182,8 @@ sub vm_list {
 
     for my $vm (@vm_list) {
         my $storage = $self->{storage}->read($vm->{storage_id});
-        $vm->{storage} = $storage->{name};
+        $vm->{storage_id} = $storage->{id};
+        $vm->{storage_name} = $storage->{name};
     }
 
     my $output;
@@ -207,6 +208,12 @@ sub display_objects {
         storage_list => \@storage_list,
         vm_list      => \@vm_list,
     };
+
+    for my $vm (@vm_list) {
+        my $storage = $self->{storage}->read($vm->{storage_id});
+        $vm->{storage_id} = $storage->{id};
+        $vm->{storage_name} = $storage->{name};
+    }
 
     my $output;
 

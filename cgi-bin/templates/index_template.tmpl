@@ -11,7 +11,7 @@
     <ul>
         [% FOREACH storage IN storage_list %]
         <li>
-            Storage Name: [% storage.name %], Capacity: [% storage.capacity %]
+            Storage ID: [% storage.id %], Storage Name: [% storage.name %], Capacity: [% storage.capacity %]
             [<a href="/update_storage?storage_id=[% storage.id %]">Edit</a>]
             [<a href="/delete_storage?storage_id=[% storage.id %]">Delete</a>]
         </li>
@@ -22,7 +22,7 @@
     <ul>
         [% FOREACH vm IN vm_list %]
         <li>
-            VM Name: [% vm.name %], OS: [% vm.os %], Storage: [% vm.storage %]
+            VM Name: [% vm.name %], OS: [% vm.os %], Storage ID: [% vm.storage_id %], Storage: [% vm.storage_name %]
             [<a href="/update_vm?vm_id=[% vm.id %]">Edit</a>]
             [<a href="/delete_vm?vm_id=[% vm.id %]">Delete</a>]
         </li>
