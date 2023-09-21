@@ -175,10 +175,15 @@ sub vm_list {
     
     my $template = Template->new();
     my $template_file = 'templates/vm_list.tmpl';
-    
+
     my $template_data = {
         vm_list => \@vm_list,
     };
+
+    for my $vm (@vm_list) {
+        my $storage = $self->{storage}->read($vm->{storage_id});
+        $vm->{storage} = $storage->{name};
+    }
 
     my $output;
     
