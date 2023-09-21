@@ -117,31 +117,38 @@ sub update_vm {
     my $cgi = $self->{cgi};
 
     my $vm_id = $cgi->param('vm_id');
-    my $name = $cgi->param('name');
-    my $os = $cgi->param('os');
-    my $storage_id = $cgi->param('storage_id');
-    
-    if ($vm_id && $name && $os && $storage_id) {
-        $self->{vm}->update($vm_id, $name, $os, $storage_id);
-        $self->{response_content} = "Virtual machine updated successfully";
+
+    if ($cgi->request_method() eq 'POST') {
+        my $name = $cgi->param('name');
+        my $os = $cgi->param('os');
+        my $storage_id = $cgi->param('storage_id');
+
+        if ($name && $os && $storage_id) {
+            $self->{vm}->update($vm_id, $name, $os, $storage_id);
+            $self->{response_content} = "Virtual machine updated successfully";
+        } else {
+            $self->{response_content} = "Please provide all required information.";
+        }
     } else {
-        my @storage_list = $self->{storage}->read_all();
-        my @vm_list = $self->{vm}->read_all();
+        my $vm = $self->{vm}->read($vm_id);
 
-        my $template = Template->new();
-        my $template_file = 'templates/update_vm.tmpl';
+        if ($vm) {
+            my $template = Template->new();
+            my $template_file = 'templates/edit_vm.tmpl';
 
-        my $template_data = {
-            storage_list => \@storage_list,
-            vm_list      => \@vm_list,
-        };
+            my $template_data = {
+                vm => $vm,
+            };
 
-        my $output;
+            my $output;
 
-        $template->process($template_file, $template_data, \$output)
-            || die "Template rendering error: " . $template->error();
+            $template->process($template_file, $template_data, \$output)
+                || die "Template rendering error: " . $template->error();
 
-        $self->{response_content} = $output;
+            $self->{response_content} = $output;
+        } else {
+            $self->{response_content} = "Virtual machine not found or an error occurred.";
+        }
     }
 }
 

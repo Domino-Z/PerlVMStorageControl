@@ -5,14 +5,20 @@
 </head>
 <body>
     <h1>Edit Virtual Machine</h1>
-    <form action="/edit_vm?vm_id=[% vm.id %]" method="post">
+    <form action="/update_vm" method="post">
+        <input type="hidden" name="vm_id" value="[% vm.id %]">
+
         <label for="name">VM Name:</label>
         <input type="text" name="name" id="name" value="[% vm.name %]" required><br>
+        
         <label for="os">OS:</label>
         <input type="text" name="os" id="os" value="[% vm.os %]" required><br>
+        
         <label for="storage_id">Storage:</label>
         <input type="number" name="storage_id" id="storage_id" value="[% vm.storage_id %]" required><br>
+        
         <input type="submit" value="Save Changes">
     </form>
+    <a href="/vm_list">Back to Virtual Machine List</a>
 </body>
 </html>
