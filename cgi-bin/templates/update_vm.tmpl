@@ -15,7 +15,12 @@
         <input type="text" name="os" id="os" value="[% vm.os %]" required><br>
         
         <label for="storage_id">Storage:</label>
-        <input type="number" name="storage_id" id="storage_id" value="[% vm.storage_id %]" required><br>
+        <select name="storage_id" id="storage_id">
+            <option value="">Select Storage</option>
+            [% FOREACH storage IN storage_list %]
+                <option value="[% storage.id %]" [% IF storage.id == vm.storage_id %]selected="selected"[% END %]>[% storage.name %]</option>
+            [% END %]
+        </select><br>
         
         <input type="submit" value="Save Changes">
     </form>

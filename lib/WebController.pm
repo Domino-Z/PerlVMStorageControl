@@ -131,13 +131,15 @@ sub update_vm {
         }
     } else {
         my $vm = $self->{vm}->read($vm_id);
+        my @storage_list = $self->{storage}->read_all();
 
         if ($vm) {
             my $template = Template->new();
-            my $template_file = 'templates/edit_vm.tmpl';
+            my $template_file = 'templates/update_vm.tmpl';
 
             my $template_data = {
                 vm => $vm,
+                storage_list => \@storage_list,
             };
 
             my $output;
