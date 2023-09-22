@@ -15,6 +15,8 @@ sub new {
     bless $self, $class;
     return $self;
 }
+# enum
+my @valid_os_types = qw(Windows Linux MacOS BSD);
 
 sub create_storage {
     my ($self) = @_;
@@ -24,7 +26,7 @@ sub create_storage {
     my $capacity = $cgi->param('capacity');
 
     if ($name && $capacity) {
-        if ($capacity !~ /^\d+$/ || $capacity <= 0){
+        if ($capacity !~ /^\d+$/ || $capacity <= 0) {
             $self->{response_content} = "Capacity should be a positive integer.";
             return;
         }
@@ -56,13 +58,14 @@ sub create_vm {
     my $name = $cgi->param('name');
     my $os = $cgi->param('os');
     my $storage_id = $cgi->param('storage_id');
+    my $description = $cgi->param('description');
 
-    if ($name && $os && $storage_id) {
-        if ($os ne 'Windows' && $os ne 'Linux'){
-            $self->{response_content} = 'Invalid OS selected.';
+    if ($name && $os && $storage_id && $description) {
+        unless (grep { $_ eq $os } @valid_os_types) {
+            $self->{response_content} = "Invalid OS type: $os";
             return;
         }
-        my $vm_id = $self->{vm}->create($name, $os, $storage_id);        
+        my $vm_id = $self->{vm}->create($name, $os, $storage_id, $description);
         $self->{response_content} = "Virtual machine created successfully";
     } else {
         my @storage_list = $self->{storage}->read_all();
@@ -100,6 +103,10 @@ sub update_storage {
         my $name = $cgi->param('name');
         my $capacity = $cgi->param('capacity');
 
+        if ($capacity !~ /^\d+$/ || $capacity <= 0) {
+            $self->{response_content} = "Capacity should be a positive integer.";
+            return;
+        }
         if ($name && $capacity) {
             $self->{storage}->update($storage_id, $name, $capacity);
             $self->{response_content} = "Storage updated successfully";
@@ -139,13 +146,14 @@ sub update_vm {
         my $name = $cgi->param('name');
         my $os = $cgi->param('os');
         my $storage_id = $cgi->param('storage_id');
+        my $description = $cgi->param('description');
 
-        if ($name && $os && $storage_id) {
-            if ($os ne 'Windows' && $os ne 'Linux'){
-            $self->{response_content} = 'Invalid OS selected.';
-            return;
-        }
-            $self->{vm}->update($vm_id, $name, $os, $storage_id);
+        if ($name && $os && $storage_id && $description) {
+            unless (grep { $_ eq $os } @valid_os_types) {
+                $self->{response_content} = "Invalid OS type: $os";
+                return;
+            }
+            $self->{vm}->update($vm_id, $name, $os, $storage_id, $description);
             $self->{response_content} = "Virtual machine updated successfully";
         } else {
             $self->{response_content} = "Please provide all required information.";
@@ -183,6 +191,16 @@ sub delete_vm {
 
     $self->{vm}->delete($vm_id);
     $self->{response_content} = "Virtual machine deleted successfully";
+}
+
+sub delete_storage {
+    my ($self) = @_;
+    my $cgi = $self->{cgi};
+
+    my $storage_id = $cgi->param('storage_id');
+
+    $self->{storage}->delete($storage_id); 
+    $self->{response_content} = "Storage deleted successfully";
 }
 
 sub storage_list {

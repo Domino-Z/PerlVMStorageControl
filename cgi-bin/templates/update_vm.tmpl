@@ -24,7 +24,10 @@
                 <option value="[% storage.id %]" [% IF storage.id == vm.storage_id %]selected="selected"[% END %]>[% storage.name %]</option>
             [% END %]
         </select><br>
-        
+
+        <label for="description">Description:</label>
+        <textarea name="description" id="description" required>[% vm.description %]</textarea><br>
+
         <input type="submit" value="Save Changes">
     </form>
     <a href="/vm_list">Back to Virtual Machine List</a>
