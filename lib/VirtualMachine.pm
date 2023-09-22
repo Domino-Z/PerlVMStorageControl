@@ -46,6 +46,22 @@ sub read_all {
     return @vm_list;
 }
 
+sub read_by_storage_id {
+    my ($self, $storage_id) = @_;
+
+    my $sql = "SELECT * FROM $table_name WHERE storage_id = ?";
+    
+    my $sth = $self->{dbh}->prepare($sql);
+    $sth->execute($storage_id);
+    
+    my @vms = ();
+    while (my $row = $sth->fetchrow_hashref) {
+        push @vms, $row;
+    }
+    
+    return @vms;
+}
+
 sub update {
     my ($self, $vm_id, $name, $os, $storage_id, $description) = @_;
     unless ($vm_id && $name && $os && $storage_id) {

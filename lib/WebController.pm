@@ -198,8 +198,8 @@ sub delete_storage {
     my $cgi = $self->{cgi};
 
     my $storage_id = $cgi->param('storage_id');
-    my @vm_list = $self->{vm}->read_all();
-    my @associated_vms = grep { $_->{storage_id} == $storage_id } @vm_list;
+    
+    my @associated_vms = $self->{vm}->read_by_storage_id($storage_id);
 
     if (@associated_vms) {
         $self->{response_content} = "Cannot delete this storage as it is linked to one or more VMs.";
