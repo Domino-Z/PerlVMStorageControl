@@ -24,6 +24,10 @@ sub create_storage {
     my $capacity = $cgi->param('capacity');
 
     if ($name && $capacity) {
+        if ($capacity !~ /^\d+$/ || $capacity <= 0){
+            $self->{response_content} = "Capacity should be a positive integer.";
+            return;
+        }
         my $storage_id = $self->{storage}->create($name, $capacity);
         $self->{response_content} = "Storage created successfully";
     } else {
@@ -91,28 +95,37 @@ sub update_storage {
     my $cgi = $self->{cgi};
 
     my $storage_id = $cgi->param('storage_id');
-    my $name = $cgi->param('name');
-    my $capacity = $cgi->param('capacity');
 
-    if ($storage_id && $name && $capacity) {
-        $self->{storage}->update($storage_id, $name, $capacity);
-        $self->{response_content} = "Storage updated successfully";
+    if ($cgi->request_method() eq 'POST') {
+        my $name = $cgi->param('name');
+        my $capacity = $cgi->param('capacity');
+
+        if ($name && $capacity) {
+            $self->{storage}->update($storage_id, $name, $capacity);
+            $self->{response_content} = "Storage updated successfully";
+        } else {
+            $self->{response_content} = "Please provide all required information.";
+        }
     } else {
-        my @storage_list = $self->{storage}->read_all();
+        my $storage = $self->{storage}->read($storage_id);
 
-        my $template = Template->new();
-        my $template_file = 'templates/update_storage.tmpl';
+        if ($storage) {
+            my $template = Template->new();
+            my $template_file = 'templates/update_storage.tmpl';
 
-        my $template_data = {
-            storage_list => \@storage_list,
-        };
+            my $template_data = {
+                storage => $storage,
+            };
 
-        my $output;
+            my $output;
 
-        $template->process($template_file, $template_data, \$output)
-            || die "Template rendering error: " . $template->error();
+            $template->process($template_file, $template_data, \$output)
+                || die "Template rendering error: " . $template->error();
 
-        $self->{response_content} = $output;
+            $self->{response_content} = $output;
+        } else {
+            $self->{response_content} = "Storage not found or an error occurred.";
+        }
     }
 }
 

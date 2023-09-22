@@ -5,12 +5,17 @@
 </head>
 <body>
     <h1>Edit Storage</h1>
-    <form action="/edit_storage?storage_id=[% storage.id %]" method="post">
-        <label for="name">Storage Name:</label>
+    <form action="/update_storage" method="post">
+        <input type="hidden" name="storage_id" value="[% storage.id %]">
+        
+        <label for="name">Name:</label>
         <input type="text" name="name" id="name" value="[% storage.name %]" required><br>
+        
         <label for="capacity">Capacity:</label>
-        <input type="number" name="capacity" id="capacity" value="[% storage.capacity %]" required><br>
-        <input type="submit" value="Save Changes">
+        <input type="text" name="capacity" id="capacity" value="[% storage.capacity %]" required><br>
+        
+        <input type="submit" value="Update Storage">
     </form>
+    <a href="/storage_list">Back to Storage List</a>
 </body>
 </html>
