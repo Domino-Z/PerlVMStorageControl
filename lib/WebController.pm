@@ -54,6 +54,10 @@ sub create_vm {
     my $storage_id = $cgi->param('storage_id');
 
     if ($name && $os && $storage_id) {
+        if ($os ne 'Windows' && $os ne 'Linux'){
+            $self->{response_content} = 'Invalid OS selected.';
+            return;
+        }
         my $vm_id = $self->{vm}->create($name, $os, $storage_id);        
         $self->{response_content} = "Virtual machine created successfully";
     } else {
@@ -124,6 +128,10 @@ sub update_vm {
         my $storage_id = $cgi->param('storage_id');
 
         if ($name && $os && $storage_id) {
+            if ($os ne 'Windows' && $os ne 'Linux'){
+            $self->{response_content} = 'Invalid OS selected.';
+            return;
+        }
             $self->{vm}->update($vm_id, $name, $os, $storage_id);
             $self->{response_content} = "Virtual machine updated successfully";
         } else {
