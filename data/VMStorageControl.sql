@@ -16,4 +16,6 @@ CREATE TABLE "storage" (
   "updated_at" timestamptz NOT NULL DEFAULT (now())
 );
 
+ALTER TABLE "virtual_machine" ADD COLUMN "description" TEXT;
+
 ALTER TABLE "virtual_machine" ADD FOREIGN KEY ("storage_id") REFERENCES "storage" ("id");

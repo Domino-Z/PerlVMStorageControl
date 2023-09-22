@@ -16,7 +16,7 @@ sub new {
     return $self;
 }
 # enum
-my @valid_os_types = qw(Windows Linux MacOS BSD);
+my @valid_os_types = qw(Windows Linux);
 
 sub create_storage {
     my ($self) = @_;
@@ -199,8 +199,14 @@ sub delete_storage {
 
     my $storage_id = $cgi->param('storage_id');
 
-    $self->{storage}->delete($storage_id); 
-    $self->{response_content} = "Storage deleted successfully";
+    my @vms = $self->{vm}->read($storage_id);
+
+    if (@vms) {
+        $self->{response_content} = "Cannot delete this storage as it is linked to one or more VMs.";
+    } else {
+        $self->{storage}->delete($storage_id); 
+        $self->{response_content} = "Storage deleted successfully";
+    }
 }
 
 sub storage_list {
@@ -224,14 +230,8 @@ sub storage_list {
 
 sub vm_list {
     my ($self) = @_;
-    my @vm_list = $self->{vm}->read_all();
-    
-    my $template = Template->new();
-    my $template_file = 'templates/vm_list.tmpl';
 
-    my $template_data = {
-        vm_list => \@vm_list,
-    };
+    my @vm_list = $self->{vm}->read_all();
 
     for my $vm (@vm_list) {
         my $storage = $self->{storage}->read($vm->{storage_id});
@@ -239,8 +239,13 @@ sub vm_list {
         $vm->{storage_name} = $storage->{name};
     }
 
+    my $template = Template->new();
+    my $template_file = 'templates/vm_list.tmpl';
+    my $template_data = {
+        vm_list => \@vm_list,
+    };
+
     my $output;
-    
     $template->process($template_file, $template_data, \$output)
         || die "Template rendering error: " . $template->error();
 
