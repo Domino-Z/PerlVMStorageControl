@@ -60,7 +60,7 @@ sub create_vm {
     my $storage_id = $cgi->param('storage_id');
     my $description = $cgi->param('description');
 
-    if ($name && $os && $storage_id && $description) {
+    if ($name && $os && $storage_id) {
         unless (grep { $_ eq $os } @valid_os_types) {
             $self->{response_content} = "Invalid OS type: $os";
             return;
